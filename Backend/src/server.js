@@ -3,14 +3,18 @@ import dotenv from "dotenv";
 import path from "path";
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
+import connectDb from "./lib/db.js"
+import cookieParser from "cookie-parser";
 dotenv.config();
 const app = express();
 const _dirname = path.resolve();
+app.set("trust proxy", true);
 
-console.log(process.env.PORT);
 
+app.use(cookieParser());
+app.use(express.json());
 app.use("/api/auth",authRoutes);
-app.use("/api/auth",messageRoutes);
+app.use("/api/messages",messageRoutes);
 
 //make ready for deployment
 if(process.env.NODE_ENV === "production") {
@@ -23,5 +27,9 @@ if(process.env.NODE_ENV === "production") {
 
 
 const PORT = process.env.PORT || 3000;
+console.log(PORT);
 
-app.listen(PORT,()=>console.log("app is running on port : "+PORT))
+app.listen(PORT,()=>{
+    connectDb();
+    console.log("app is running on port : "+PORT);
+})
