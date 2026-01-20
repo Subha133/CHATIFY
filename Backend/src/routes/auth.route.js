@@ -13,9 +13,7 @@ router.post("/logout",logout);
 
 router.put("/updateProfile",protectRoute,updateProfile);
 
-router.get("/test",arcjetProtection,(req,res)=> {
-    res.status(200).json({message : "test route"})
-})
+router.get("/check", protectRoute, (req, res) => res.status(200).json(req.user));
  
 
 export default router;
